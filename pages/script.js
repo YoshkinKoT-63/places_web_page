@@ -46,6 +46,7 @@ const placesList = document.querySelector('.places-list'); //контейнер 
 const addPlaceButton = document.querySelector('.user-info__button'); //кнопка "+" добавления карточки
 const addPlacePopupButton = document.querySelector('.popup__button'); //кнопка "+" формы ввода
 const popupForm = document.forms.new; //форма ввода
+const popup = document.querySelector('.popup');
 const closePopupForm = document.querySelector('.popup__close'); //значок закрытия формы ввода
 
 //функция добавления карточки
@@ -90,14 +91,8 @@ function createPlace(placeName, link) {
 
 //функция удаления карточки
 function deletePlace(event){
-  if (event.target.classList.contains('place-card__delete-icon')){
-//Можно лучше: Используя parentElement мы сильно зависим от разметки, которая может измениться. Лучше использовать метод closest для поиска нужного нам родителя
-// https://learn.javascript.ru/searching-elements-dom
-//Так код выполниться корректно вне зависимости от уровня вложенности элемента, на котором произошло событие.
-
-    const place = event.target.parentNode.parentNode;
+    const place = event.target.closest('.place-card');
     place.parentNode.removeChild(place);
-  }
 }
 
 //функция добавления карточки пользователем
@@ -121,9 +116,7 @@ function inputHandler () {
   const placeName = popupForm.elements.name;
   const link = popupForm.elements.link;
   if (placeName.value.length === 0 || link.value.length === 0) {
-    //Можно лучше: Второй аргумент метода setAttribute должен быть строкой
-    //setAttribute(qualifiedName: string, value: string): void;
-    addPlacePopupButton.setAttribute('disabled', true);
+    addPlacePopupButton.setAttribute('disabled', 'true');
   }
     else {
       addPlacePopupButton.removeAttribute('disabled');
@@ -132,8 +125,6 @@ function inputHandler () {
 
 //функция закрытия формы ввода
 function popupIsClosed() {
-  //Можно лучше: Каждый раз искать попап не производительно. Стоит вынести в константу и передавать в функцию в качестве аргумента.
-  const popup = document.querySelector('.popup');
   popup.classList.remove('popup_is-opened');
   popupForm.reset();
   closePopupForm.removeEventListener('click', popupIsClosed); //снять обработчик закрытия формы ввода при нажатии на крестик
@@ -144,11 +135,7 @@ function popupIsClosed() {
 
 //закрытие формы ввода при нажатии Esc
 function popupIsClosedByEscapeButton(event) {
-  //Можно лучше: keyCode порождал проблемы и из-за этого признан устаревшим, лучше воспользоваться event.code
-  //https://keycode.info/
-  //https://learn.javascript.ru/keyboard-events#sobytiya-keydown-i-keyup
-
-  if (event.keyCode == '27') {
+  if (event.code == 'Escape') {
     popupIsClosed();
   }
 }
@@ -166,10 +153,7 @@ function popupIsOpened() {
 
 //функция лайков
 function placeLiked(event) {
-  if (event.target.classList.contains('place-card__like-icon')){
-      event.target.classList.toggle('place-card__like-icon_liked');
-      console.log(event.target);
-  }
+  event.target.classList.toggle('place-card__like-icon_liked');
 }
 
 //заполняем карточками контейнер
@@ -177,32 +161,11 @@ fillingPlaceList(initialCards);
 
 //обработчики событий
 addPlaceButton.addEventListener('click', popupIsOpened);
-placesList.addEventListener('click', placeLiked);
-/* Можно лучше: Выше уже есть обработчик на контейнере, лучше проверить все условия в одном обработчике:
-*
-container.addEventListener('click', (event) => {
+
+placesList.addEventListener('click', (event) => {
   if (event.target.classList.contains('place-card__like-icon')) {
-    likeHandler(event.target)
-  } else if (условие) {
-    тут вызов функции удаления с передачей в нее event.target
-  } Другие условия, если требуется.
+    placeLiked(event);
+  } else if (event.target.classList.contains('place-card__delete-icon')) {
+    deletePlace(event);
+  }
 })
-*
-* Из функций проверки удаляем, чтобы сделать их более универсальными и отвечающими требованию единственной ответственности. */
-
-placesList.addEventListener('click', deletePlace);
-
-/*Отлично:
-Код хорошо структурирован и стилизован
-Используются комментарии в коде
-Код краток и лаконичен
-Используется делегирование
-Функционал полностью соответствует заданию
-Отсутствуют неиспользуемые переменные и функции
-Есть удаление обработчиков*/
-
-
-//Отличная работа. Задание принято.
-//Просьба не оставлять без внимания не критичные комментарии. Рефакторинг - неотъемлемая часть работы программиста. Всегда нужно стараться делать код лучше.
-//Перед отправкой на проверку следующего спринта необходимо очистить код от комментариев предыдущего спринта. Спасибо.
-//Успехов в дальнейшем обучении.
