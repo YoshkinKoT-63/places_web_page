@@ -18,6 +18,7 @@
         <div class="user-info__data">
           <h1 class="user-info__name">Jaques Causteau</h1>
           <p class="user-info__job">Sailor, Researcher</p>
+          <button class="button user-info__edit-button">edit</button>
         </div>
         <button class="button user-info__button">+</button>
       </div>
@@ -25,14 +26,25 @@
     <div class="places-list root__section">
     </div>
     
-    <div class="popup">
+    <div class="popup popup_type_add-place">
       <div class="popup__content">
         <img src="./images/close.svg" alt="" class="popup__close">
         <h3 class="popup__title">Новое место</h3>
         <form class="popup__form" name="new">
             <input type="text" name="name" class="popup__input popup__input_type_name" placeholder="Название">
             <input type="text" name="link" class="popup__input popup__input_type_link-url" placeholder="Ссылка на картинку">
-            <button type class="button popup__button">+</button>
+            <button type class="button popup__button popup__button_inactive popup__button-add-place">+</button>
+        </form>
+      </div>
+    </div>
+    <div class="popup popup_type_editInfo">
+      <div class="popup__content">
+        <img src="./images/close.svg" alt="" class="popup__close">
+        <h3 class="popup__title">Редактировать профиль</h3>
+        <form class="popup__form" name="edit">
+            <input type="text" name="infoName" class="popup__input popup__input_type_info-name">
+            <input type="text" name="infoAbout" class="popup__input popup__input_type_info-about">
+            <button type class="button popup__button popup__button_active popup__button-edit-profile">Сохранить</button>
         </form>
       </div>
     </div>

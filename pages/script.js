@@ -44,10 +44,13 @@ const initialCards = [
 //переменные
 const placesList = document.querySelector('.places-list'); //контейнер с карточками
 const addPlaceButton = document.querySelector('.user-info__button'); //кнопка "+" добавления карточки
-const addPlacePopupButton = document.querySelector('.popup__button'); //кнопка "+" формы ввода
-const popupForm = document.forms.new; //форма ввода
-const popup = document.querySelector('.popup');
-const closePopupForm = document.querySelector('.popup__close'); //значок закрытия формы ввода
+const addPlacePopupButton = document.querySelector('.popup__button-add-place'); //кнопка "+" формы ввода
+const editProfilePopupButton = document.querySelector('.popup__button-edit-profile'); //кнопка "сохранить" формы ввода
+const popupAddPlace = document.querySelector('.popup_type_add-place'); //форма ввода нового места
+const pupupEditInfo = document.querySelector('.popup_type_editInfo'); //форма редактирования профиля
+const editInfoButton = document.querySelector('.user-info__edit-button'); //кнопка "Edit" 
+let popupForm; //форма ввода
+let closePopupForm; //значок закрытия формы ввода
 
 //функция добавления карточки
 function createPlace(placeName, link) {
@@ -111,26 +114,42 @@ function fillingPlaceList (places) {
   });
 }
 
+//включение кнопки ввода формы
+function popupButtonActive(popupButton) {
+  popupButton.setAttribute('disabled', 'true');
+  popupButton.classList.add('popup__button_inactive');
+  popupButton.classList.remove('popup__button_active');
+}
+
+//отключение кнопки ввода формы
+function popupButtonInactive(popupButton) {
+  popupButton.removeAttribute('disabled');
+  popupButton.classList.add('popup__button_active');
+  popupButton.classList.remove('popup__button_inactive');
+}
+
 //функция проверки полей ввода названия и адреса
-function inputHandler () {
+function inputHandlerAddPlace() {
   const placeName = popupForm.elements.name;
   const link = popupForm.elements.link;
   if (placeName.value.length === 0 || link.value.length === 0) {
-    addPlacePopupButton.setAttribute('disabled', 'true');
+    popupButtonActive(addPlacePopupButton);
   }
     else {
-      addPlacePopupButton.removeAttribute('disabled');
+      popupButtonInactive(addPlacePopupButton);
     }
 }
 
-//функция закрытия формы ввода
-function popupIsClosed() {
-  popup.classList.remove('popup_is-opened');
-  popupForm.reset();
-  closePopupForm.removeEventListener('click', popupIsClosed); //снять обработчик закрытия формы ввода при нажатии на крестик
-  document.removeEventListener('keydown', popupIsClosedByEscapeButton); //снять обработчик закрытия формы ввода при нажатии клавиши Esc
-  popupForm.removeEventListener('input', inputHandler); //снять обработчик заполнения полей
-  popupForm.removeEventListener('submit', placeAddedByUser); //снять обработчик отправки формы
+//функция проверки полей ввода имени и рода деятельности
+function inputHandlerEditProfile() {
+  const infoName = popupForm.elements.infoName;
+  const infoAbout = popupForm.elements.infoAbout;
+  if (infoName.value.length === 0 || infoAbout.value.length === 0) {
+    popupButtonActive(editProfilePopupButton);
+  }
+    else {
+      popupButtonInactive(editProfilePopupButton);
+    }
 }
 
 //закрытие формы ввода при нажатии Esc
@@ -140,15 +159,50 @@ function popupIsClosedByEscapeButton(event) {
   }
 }
 
-//функция открытия формы ввода
-function popupIsOpened() {
-  const popup = document.querySelector('.popup');
-  popup.classList.add('popup_is-opened');
+// закрытие окна формы ввода "добавить место"
+function popupIsClosed() {
+  popupForm.closest('.popup').classList.remove('popup_is-opened');
+  popupForm.reset();
+  closePopupForm.removeEventListener('click', popupIsClosed); //снять обработчик закрытия формы ввода при нажатии на крестик
+  document.removeEventListener('keydown', popupIsClosedByEscapeButton); //снять обработчик закрытия формы ввода при нажатии клавиши Esc
+  popupForm.removeEventListener('input', inputHandlerAddPlace); //снять обработчик заполнения полей
+  popupForm.removeEventListener('submit', placeAddedByUser); //снять обработчик отправки формы
+}
+
+// закрытие окна формы ввода редактирования профиля
+function popupIsClosed() {
+  popupForm.closest('.popup').classList.remove('popup_is-opened');
+  popupForm.reset();
+  closePopupForm.removeEventListener('click', popupIsClosed); //снять обработчик закрытия формы ввода при нажатии на крестик
+  document.removeEventListener('keydown', popupIsClosedByEscapeButton); //снять обработчик закрытия формы ввода при нажатии клавиши Esc
+  popupForm.removeEventListener('input', inputHandlerEditProfile); //снять обработчик заполнения полей
+  popupForm.removeEventListener('submit', placeAddedByUser); //снять обработчик отправки формы
+}
+
+//функция открытия формы ввода "добавить место"
+function popupAddPlaceIsOpened() {
+  popupAddPlace.classList.add('popup_is-opened');
+  closePopupForm = popupAddPlace.querySelector('.popup__close');
+  popupForm = document.forms.new;
+  addPlacePopupButton.classList.add('popup__button_inactive');
   addPlacePopupButton.setAttribute('disabled', true); //кнопка ввода неактивна
   closePopupForm.addEventListener('click', popupIsClosed); //обработчик закрытия формы ввода при нажатии на крестик
   document.addEventListener('keydown', popupIsClosedByEscapeButton); //обработчик закрытия формы ввода при нажатии клавиши Esc
-  popupForm.addEventListener('input', inputHandler); //обработчик заполнения полей
+  popupForm.addEventListener('input', inputHandlerAddPlace); //обработчик заполнения полей
   popupForm.addEventListener('submit', placeAddedByUser); //обработчик отправки формы
+}
+
+//функция открытия формы ввода "редактировать профиль"
+function popupEditInfoIsOpened() {
+  pupupEditInfo.classList.add('popup_is-opened');
+  closePopupForm = pupupEditInfo.querySelector('.popup__close'); //значок закрытия формы ввода
+  popupForm = document.forms.edit;
+  editProfilePopupButton.classList.add('popup__button_inactive');
+  editProfilePopupButton.setAttribute('disabled', true); //кнопка ввода неактивна
+  closePopupForm.addEventListener('click', popupIsClosed); //обработчик закрытия формы ввода при нажатии на крестик
+  document.addEventListener('keydown', popupIsClosedByEscapeButton); //обработчик закрытия формы ввода при нажатии клавиши Esc
+  popupForm.addEventListener('input', inputHandlerEditProfile); //обработчик заполнения полей
+ // popupForm.addEventListener('submit', placeAddedByUser); //обработчик отправки формы
 }
 
 //функция лайков
@@ -160,7 +214,9 @@ function placeLiked(event) {
 fillingPlaceList(initialCards);
 
 //обработчики событий
-addPlaceButton.addEventListener('click', popupIsOpened);
+addPlaceButton.addEventListener('click', popupAddPlaceIsOpened);
+
+editInfoButton.addEventListener('click', popupEditInfoIsOpened);
 
 placesList.addEventListener('click', (event) => {
   if (event.target.classList.contains('place-card__like-icon')) {
