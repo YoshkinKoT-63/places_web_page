@@ -20,3 +20,18 @@
   justify-content: center;
   display: none;
 }
+
+.popup__test {
+  color: white;
+  display: flex;
+}
+
+.popup__image-content {
+  min-width: 300px;
+  min-height: 300px;
+  max-width: 80vw;
+  max-height: 80vh;
+  position: relative;
+  box-sizing: border-box;
+}
+
