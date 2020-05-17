@@ -194,11 +194,15 @@ function popupAddPlaceIsOpened() {
 
 //функция открытия формы ввода "редактировать профиль"
 function popupEditInfoIsOpened() {
+  const userName = document.querySelector('.user-info__name');//имя пользователя
+  const userAbout = document.querySelector('.user-info__job');//род деятельности пользователя
+  let inputUserName = pupupEditInfo.querySelector('.popup__input_type_info-name');
+  let inputUserAbout = pupupEditInfo.querySelector('.popup__input_type_info-about');
+  inputUserName.value = userName.textContent;
+  inputUserAbout.value = userAbout.textContent;
   pupupEditInfo.classList.add('popup_is-opened');
   closePopupForm = pupupEditInfo.querySelector('.popup__close'); //значок закрытия формы ввода
   popupForm = document.forms.edit;
-  editProfilePopupButton.classList.add('popup__button_inactive');
-  editProfilePopupButton.setAttribute('disabled', true); //кнопка ввода неактивна
   closePopupForm.addEventListener('click', popupIsClosed); //обработчик закрытия формы ввода при нажатии на крестик
   document.addEventListener('keydown', popupIsClosedByEscapeButton); //обработчик закрытия формы ввода при нажатии клавиши Esc
   popupForm.addEventListener('input', inputHandlerEditProfile); //обработчик заполнения полей
