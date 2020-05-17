@@ -49,6 +49,8 @@ const editProfilePopupButton = document.querySelector('.popup__button-edit-profi
 const popupAddPlace = document.querySelector('.popup_type_add-place'); //форма ввода нового места
 const pupupEditInfo = document.querySelector('.popup_type_editInfo'); //форма редактирования профиля
 const editInfoButton = document.querySelector('.user-info__edit-button'); //кнопка "Edit" 
+const userName = document.querySelector('.user-info__name');//имя пользователя
+const userAbout = document.querySelector('.user-info__job');//род деятельности пользователя
 let popupForm; //форма ввода
 let closePopupForm; //значок закрытия формы ввода
 
@@ -106,6 +108,15 @@ function placeAddedByUser(event) {
   createPlace(placeName, link);
   popupIsClosed();
 }
+
+//функция изменения имени и рода деятельности пользователя
+function changeProfileInfo(event) {
+  event.preventDefault();
+  userName.textContent = popupForm.elements.infoName.value;
+  userAbout.textContent = popupForm.elements.infoAbout.value;
+  popupIsClosed();
+}
+
 
 //функция заполнения
 function fillingPlaceList (places) {
@@ -194,8 +205,8 @@ function popupAddPlaceIsOpened() {
 
 //функция открытия формы ввода "редактировать профиль"
 function popupEditInfoIsOpened() {
-  const userName = document.querySelector('.user-info__name');//имя пользователя
-  const userAbout = document.querySelector('.user-info__job');//род деятельности пользователя
+
+
   let inputUserName = pupupEditInfo.querySelector('.popup__input_type_info-name');
   let inputUserAbout = pupupEditInfo.querySelector('.popup__input_type_info-about');
   inputUserName.value = userName.textContent;
@@ -206,7 +217,7 @@ function popupEditInfoIsOpened() {
   closePopupForm.addEventListener('click', popupIsClosed); //обработчик закрытия формы ввода при нажатии на крестик
   document.addEventListener('keydown', popupIsClosedByEscapeButton); //обработчик закрытия формы ввода при нажатии клавиши Esc
   popupForm.addEventListener('input', inputHandlerEditProfile); //обработчик заполнения полей
- // popupForm.addEventListener('submit', placeAddedByUser); //обработчик отправки формы
+  popupForm.addEventListener('submit', changeProfileInfo); //обработчик отправки формы
 }
 
 //функция лайков
