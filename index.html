@@ -31,10 +31,10 @@
         <img src="./images/close.svg" alt="" class="popup__close">
         <h3 class="popup__title">Новое место</h3>
         <form class="popup__form" name="new">
-            <input type="text" name="name" class="popup__input popup__input_type_name" placeholder="Название">
-            
-            <input type="text" name="link" class="popup__input popup__input_type_link-url" placeholder="Ссылка на картинку">
-            
+            <input type="text" id="name" name="name" class="popup__input popup__input_type_name" placeholder="Название"minlength="2" maxlength="30" required>
+            <span id="name-error" class="popup__error"></span>
+            <input type="url" id="link" name="link" class="popup__input popup__input_type_link-url" placeholder="Ссылка на картинку" minlength="2" required>
+            <span id="link-error" class="popup__error"></span>
             <button type class="button popup__button popup__button_inactive popup__button-add-place">+</button>
         </form>
       </div>
