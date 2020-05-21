@@ -52,14 +52,13 @@ const errorMessages = {
 const placesList = document.querySelector('.places-list'); //контейнер с карточками
 const addPlaceButton = document.querySelector('.user-info__button'); //кнопка "+" добавления карточки
 const addPlacePopupButton = document.querySelector('.popup__button-add-place'); //кнопка "+" формы ввода
-const editProfilePopupButton = document.querySelector('.popup__button-edit-profile'); //кнопка "сохранить" формы ввода
 const editInfoButton = document.querySelector('.user-info__edit-button'); //кнопка "Edit" 
 const userName = document.querySelector('.user-info__name');//имя пользователя
 const userAbout = document.querySelector('.user-info__job');//род деятельности пользователя
-let closePopupForm; //значок закрытия модального окна
-let popup;//модальное окно
-const popupForm = document.forms.new;
-const formProfile = document.forms.profile;
+let closePopupForm; //значок закрытия окна
+let popup;//всплывающее окно
+const popupForm = document.forms.new;//форма ввода новой карточки
+const formProfile = document.forms.profile;//форма редактирования профиля
 
 
 //функция проверки поля на валидность
@@ -93,7 +92,7 @@ function isValidate(input) {
   }
 
   //Функция слушатесь события на input 
-  function handlerInputForm(evt){
+  function inputHandler(evt){
     const button = evt.currentTarget.querySelector('.button');
     const [...inputs] = evt.currentTarget.elements;
     isFieldValid(evt.target);
@@ -211,7 +210,7 @@ function popupAddPlaceIsClosed() {
   closePopupForm.removeEventListener('click', popupAddPlaceIsClosed); //снять обработчик закрытия формы ввода при нажатии на крестик
   document.removeEventListener('keydown', popupIsClosedByEscapeButton); //снять обработчик закрытия формы ввода при нажатии клавиши Esc
   popupForm.removeEventListener('submit', placeAddedByUser); //снять обработчик отправки формы
-  popupForm.removeEventListener('input', handlerInputForm, true);//снять обработчик валидации полей формы
+  popupForm.removeEventListener('input', inputHandler, true);//снять обработчик валидации полей формы
 }
 
 // закрытие окна формы ввода редактирования профиля
@@ -223,7 +222,7 @@ function popupEditProfilesClosed() {
   closePopupForm.removeEventListener('click', popupEditProfilesClosed); //снять обработчик закрытия формы ввода при нажатии на крестик
   document.removeEventListener('keydown', popupIsClosedByEscapeButton); //снять обработчик закрытия формы ввода при нажатии клавиши Esc
   formProfile.removeEventListener('submit', placeAddedByUser); //снять обработчик отправки формы
-  formProfile.removeEventListener('input', handlerInputForm, true); //снять обработчик валидации полей
+  formProfile.removeEventListener('input', inputHandler, true); //снять обработчик валидации полей
 }
 
 //Закрытие окна с изображением
@@ -243,7 +242,7 @@ function popupAddPlaceIsOpened() {
   closePopupForm.addEventListener('click', popupAddPlaceIsClosed); //обработчик закрытия формы ввода при нажатии на крестик
   document.addEventListener('keydown', popupIsClosedByEscapeButton); //обработчик закрытия формы ввода при нажатии клавиши Esc
   popupForm.addEventListener('submit', placeAddedByUser); //обработчик отправки формы
-  popupForm.addEventListener('input', handlerInputForm, true);
+  popupForm.addEventListener('input', inputHandler, true);
 }
 
 //функция открытия формы ввода "редактировать профиль"
@@ -258,7 +257,7 @@ function popupEditInfoIsOpened() {
   closePopupForm.addEventListener('click', popupEditProfilesClosed); //обработчик закрытия формы ввода при нажатии на крестик
   document.addEventListener('keydown', popupIsClosedByEscapeButton); //обработчик закрытия формы ввода при нажатии клавиши Esc
   formProfile.addEventListener('submit', changeProfileInfo); //обработчик отправки формы
-  formProfile.addEventListener('input', handlerInputForm, true); //обработчик валидации полей
+  formProfile.addEventListener('input', inputHandler, true); //обработчик валидации полей
 }
 
 //функция лайков
