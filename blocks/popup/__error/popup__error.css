@@ -1,0 +1,6 @@
+.popup__error {
+  font-family: Inter;
+  color: rgba(255, 0, 0);
+  font-size: 12px;
+  line-height: 15px;
+}

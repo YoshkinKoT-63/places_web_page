@@ -41,6 +41,13 @@ const initialCards = [
    }
 ];
 
+const errorMessages = {
+  empty: 'Это обязательное поле',
+  wrongLength: 'Должно быть от 2 до 30 символов',
+  wrongUrl: 'Здесь должна быть ссылка',
+  wrongPattern: 'Введите данные в верном формате',  
+}
+
 //переменные
 const placesList = document.querySelector('.places-list'); //контейнер с карточками
 const addPlaceButton = document.querySelector('.user-info__button'); //кнопка "+" добавления карточки
@@ -52,6 +59,121 @@ const userAbout = document.querySelector('.user-info__job');//род деяте�
 let popupForm; //форма ввода
 let closePopupForm; //значок закрытия модального окна
 let popup;//модальное окно
+
+const formProfile = document.forms.profile;
+
+
+//функция проверки поля на валидность
+function isValidate(input) {
+  
+  input.setCustomValidity(""); //устанавливаем свойсво validity.customError в false
+  console.log(input);
+  console.log(input.validity);
+  console.log(input.validity.valueMissing);
+  console.log(input.validity.tooShort);
+  console.log(input.validity.typeMismatch);
+  console.log(input.validity.rangeOverflow);
+  
+
+  // если на инпуте есть атрибут required, поле validity.valueMissing будет true / false (заполнено)
+  if (input.validity.valueMissing) {
+    // текст ошибки записываем в inputElem.validationMessage с помощью input.setCustomValidity()
+    input.setCustomValidity(errorMessages.empty);
+    return false
+  }  
+
+  // если на инпуте есть атрибут minlength, поле validity.tooShort будет true / false (достигнута мин. длина)
+  if (input.validity.tooShort || input.validity.tooLong) {
+    input.setCustomValidity(errorMessages.wrongLength);
+    return false
+  } 
+
+
+  // если на инпуте есть атрибут type, поле validity.typeMismatch будет true / false (сопадение типа)
+  if (input.validity.typeMismatch && input.type === 'url') {
+    input.setCustomValidity(errorMessages.wrongUrl);
+    return false
+  } 
+
+  if (input.validity.rangeOverflow) {
+    input.setCustomValidity(errorMessages.wrongUrl);
+    return false
+  }
+
+  return input.checkValidity();
+}
+
+
+
+  /**Функция добавления/удаления ошибки с инпута, возвращает true если поле валидно, false в противном случае*/
+  function isFieldValid(input) { 
+    const errorElem = input.parentNode.querySelector(`#${input.id}-error`);
+    console.log(errorElem);
+    const valid = isValidate(input); // устанавливаем инпуту кастомные ошибки, если они есть.
+    errorElem.textContent = input.validationMessage;
+    return valid;
+  }
+
+
+
+/**Функция проверки формы на валидность, возвращает true если форма валидна   */
+function isFormValid(form) { //validateForm
+  const inputs = [...form.elements];
+  
+  let valid = true;
+  
+  inputs.forEach((input) => {
+    if (input.type !== 'submit' && input.type !== 'button') {
+      if (!isFieldValid(input)) valid = false;
+    }
+  });
+  
+  return valid;
+}
+
+
+  /**Функция слушатесь события на input */
+  function handlerInputForm(evt){
+
+    const submit = evt.currentTarget.querySelector('.button');
+    
+    const [...inputs] = evt.currentTarget.elements; // превращаем итератор(итерируемый объект) в массив
+    isFieldValid(evt.target); // проверяем поле на валидность и выводим ошибку если не валидно.
+    
+
+    // if (inputs.every(isValidate)) { // если каждый инпут формы вернул true, то включаем кнопку в противном случае выключаем
+    //   // console.log('Кнопка активирована');
+    //   setSubmitButtonState(submit, true);
+    // } else {
+    //   setSubmitButtonState(submit, false);
+    //   // console.log('Кнопка деактивирована');
+    // }
+
+    //покажу вначале без функции handlerInputForm, а инлайново внутри обработчика покажу 
+
+    // if (isFieldValid(name) && isFieldValid(link)) {
+    //   console.log('Кнопка активирована');
+    //   setSubmitButtonState(submit, true);
+    // } else {
+    //   console.log('Кнопка деактивирована');
+    //   setSubmitButtonState(submit, false);
+    // }   
+
+  }
+
+
+  formProfile.addEventListener('input', handlerInputForm, true);
+
+
+
+
+
+
+
+
+
+
+
 
 //функция добавления карточки
 function createPlace(placeName, link) {
@@ -111,11 +233,10 @@ function placeAddedByUser(event) {
 //функция изменения имени и рода деятельности пользователя
 function changeProfileInfo(event) {
   event.preventDefault();
-  userName.textContent = popupForm.elements.infoName.value;
-  userAbout.textContent = popupForm.elements.infoAbout.value;
-  popupIsClosed();
+  userName.textContent = formProfile.elements.infoName.value;
+  userAbout.textContent = formProfile.elements.infoAbout.value;
+  popupEditProfilesClosed();
 }
-
 
 //функция заполнения
 function fillingPlaceList (places) {
@@ -150,16 +271,19 @@ function inputHandlerAddPlace() {
     }
 }
 
-//функция проверки полей ввода имени и рода деятельности
+//функция активации/деактивации кнопки отправки формы имени и рода деятельности
 function inputHandlerEditProfile() {
-  const infoName = popupForm.elements.infoName;
-  const infoAbout = popupForm.elements.infoAbout;
+  const infoName = formProfile.elements.infoName;
+  const infoAbout = formProfile.elements.infoAbout;
   if (infoName.value.length === 0 || infoAbout.value.length === 0) {
     popupButtonActive(editProfilePopupButton);
   }
     else {
       popupButtonInactive(editProfilePopupButton);
     }
+
+    const inputs = Array.from(formProfile.elements);
+    
 }
 
 //закрытие формы ввода при нажатии Esc
@@ -188,12 +312,12 @@ function popupAddPlaceIsClosed() {
 
 // закрытие окна формы ввода редактирования профиля
 function popupEditProfilesClosed() {
-  popupForm.closest('.popup').classList.remove('popup_is-opened');
-  popupForm.reset();
+  formProfile.closest('.popup').classList.remove('popup_is-opened');
+  formProfile.reset();
   closePopupForm.removeEventListener('click', popupEditProfilesClosed); //снять обработчик закрытия формы ввода при нажатии на крестик
   document.removeEventListener('keydown', popupIsClosedByEscapeButton); //снять обработчик закрытия формы ввода при нажатии клавиши Esc
-  popupForm.removeEventListener('input', inputHandlerEditProfile); //снять обработчик заполнения полей
-  popupForm.removeEventListener('submit', placeAddedByUser); //снять обработчик отправки формы
+  formProfile.removeEventListener('input', inputHandlerEditProfile); //снять обработчик заполнения полей
+  formProfile.removeEventListener('submit', placeAddedByUser); //снять обработчик отправки формы
 }
 
 //Закрытие окна с изображением
@@ -226,11 +350,10 @@ function popupEditInfoIsOpened() {
   inputUserAbout.value = userAbout.textContent;
   popup.classList.add('popup_is-opened');
   closePopupForm = popup.querySelector('.popup__close'); //значок закрытия формы ввода
-  popupForm = document.forms.edit;
   closePopupForm.addEventListener('click', popupEditProfilesClosed); //обработчик закрытия формы ввода при нажатии на крестик
   document.addEventListener('keydown', popupIsClosedByEscapeButton); //обработчик закрытия формы ввода при нажатии клавиши Esc
-  popupForm.addEventListener('input', inputHandlerEditProfile); //обработчик заполнения полей
-  popupForm.addEventListener('submit', changeProfileInfo); //обработчик отправки формы
+  formProfile.addEventListener('input', inputHandlerEditProfile); //обработчик заполнения полей
+  formProfile.addEventListener('submit', changeProfileInfo); //обработчик отправки формы
 }
 
 //функция лайков
