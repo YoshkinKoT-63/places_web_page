@@ -25,21 +25,21 @@
     </div>
     <div class="places-list root__section">
     </div>
-    
+
     <div class="popup popup_type_add-place">
       <div class="popup__content">
         <img src="./images/close.svg" alt="" class="popup__close">
         <h3 class="popup__title">Новое место</h3>
         <form class="popup__form" name="new">
-            <input type="text" id="name" name="name" class="popup__input popup__input_type_name" placeholder="Название"minlength="2" maxlength="30" required>
+            <input type="text" id="name" name="name" class="popup__input popup__input_type_name" placeholder="Название" minlength="2" maxlength="30" required>
             <span id="name-error" class="popup__error"></span>
-            <input type="url" id="link" name="link" class="popup__input popup__input_type_link-url" placeholder="Ссылка на картинку" minlength="2" required>
+            <input type="url" id="link" name="link" class="popup__input popup__input_type_link-url" placeholder="Ссылка на картинку" required>
             <span id="link-error" class="popup__error"></span>
-            <button type class="button popup__button popup__button_inactive popup__button-add-place">+</button>
+            <button type="submit" class="button popup__button popup__button_inactive popup__button_add-place">+</button>
         </form>
       </div>
     </div>
-    <div class="popup popup_type_editInfo">
+    <div class="popup popup_type_edit-info">
       <div class="popup__content">
         <img src="./images/close.svg" alt="" class="popup__close">
         <h3 class="popup__title">Редактировать профиль</h3>
@@ -48,7 +48,7 @@
             <span id="info-name-error" class="popup__error"></span>
             <input type="text" id="info-about" name="infoAbout" placeholder="О себе" class="popup__input popup__input_type_info-about" required minlength="2" maxlength="30">
             <span id="info-about-error" class="popup__error"></span>
-            <button type class="button popup__button popup__button_active popup__button-edit-profile">Сохранить</button>
+            <button type="submit" class="button popup__button popup__button_active popup__button_edit-profile">Сохранить</button>
         </form>
       </div>
     </div>
@@ -56,7 +56,7 @@
     <div class="popup popup_type_image">
       <div class="popup__image-content">
         <img src="./images/close.svg" alt="" class="popup__close">
-        <img src="https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg" alt="" class="popup__image">
+        <img src="" alt="" class="popup__image">
       </div>
     </div>
 
