@@ -1,0 +1,6 @@
+.popup__error {
+  font-family: 'Inter', Verdana, Arial, sans-serif;
+  color: rgba(255, 0, 0, 1);
+  font-size: 12px;
+  line-height: 15px;
+}

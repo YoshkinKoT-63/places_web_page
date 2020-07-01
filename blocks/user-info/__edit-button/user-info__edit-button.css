@@ -1,0 +1,15 @@
+.user-info__edit-button {
+  width: 38px;
+  height: 18px;
+  font-size: 12px;
+  line-height: 15px;
+  text-transform: capitalize;
+  margin-top: 24px;
+  transition: .3s linear;
+}
+
+.user-info__edit-button:hover {
+  color: black;
+  transition: .3s linear;
+  background-color: #fff;
+}
