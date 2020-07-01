@@ -1,1 +1,1 @@
-https://yoshkinkot-63.github.io/validation/
+https://yoshkinkot-63.github.io/places_web_page/
